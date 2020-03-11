@@ -4,16 +4,20 @@
   "description": "",
   "scripts": {
     "start": "parcel ./index.html",
-    "build":"parcel build ./index.html & firebase deploy"
+    "build": "parcel build ./index.html & firebase deploy"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "jimp": "^0.9.5",
     "jquery": "^3.4.1",
-    "jsqr": "^1.2.0"
+    "jsqr": "^1.2.0",
+    "png.js": "^0.2.1"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.33",
+    "@types/png.js": "^0.2.0",
+    "@types/upng-js": "^2.1.1",
     "parcel-bundler": "^1.12.4",
     "typescript": "^3.8.3"
   }

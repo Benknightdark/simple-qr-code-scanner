@@ -1,5 +1,52 @@
+import png from "png.js";
 import jsQR from "jsqr";
 import $ from 'jquery';
+import Jimp from 'jimp';
+
+
+const fileReader = new FileReader();
+const fileInput = document.getElementById("file");
+
+// Sadly png.js doesn't return an array of pixel data, so we have to construct one by iterating over and calling getPixel
+function convertPNGtoByteArray(pngData) {
+    const data = new Uint8ClampedArray(pngData.width * pngData.height * 4);
+    for (let y = 0; y < pngData.height; y++) {
+        for (let x = 0; x < pngData.width; x++) {
+            const pixelData = pngData.getPixel(x, y);
+
+            data[(y * pngData.width + x) * 4 + 0] = pixelData[0];
+            data[(y * pngData.width + x) * 4 + 1] = pixelData[1];
+            data[(y * pngData.width + x) * 4 + 2] = pixelData[2];
+            data[(y * pngData.width + x) * 4 + 3] = pixelData[3];
+        }
+    }
+    return data;
+}
+
+fileReader.onload = function (event) {
+    try {
+        const pngReader = new png(event.target.result);
+
+      
+        pngReader.parse(function (err, pngData) {
+            if (err) throw err;
+            const pixelArray = convertPNGtoByteArray(pngData);
+            const bb = jsQR(pixelArray, pngData.width, pngData.height);
+            alert(bb?.data);
+        });
+    } catch (error) {
+        alert(error)
+    }
+};
+
+fileInput.onchange = function () {
+    fileReader.readAsArrayBuffer(fileInput.files[0]);
+};
+
+
+
+/////////////////////////////////////////////
+
 var video = document.createElement("video");
 var canvasElement = document.getElementById("canvas");
 var canvas = canvasElement.getContext("2d");
@@ -29,14 +76,6 @@ $('#open').click(() => {
         requestAnimationFrame(tick);
     });
 })
-
-
-const fileUploader = document.querySelector('#fileUpload');
-
-fileUploader.addEventListener('change', (e) => {
-  console.log(e.target.files); // get file object
-});
-
 function tick() {
     loadingMessage.innerText = "⌛ Loading video..."
     if (video.readyState === video.HAVE_ENOUGH_DATA) {
