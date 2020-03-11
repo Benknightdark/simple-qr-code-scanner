@@ -17,7 +17,10 @@ function drawLine(begin, end, color) {
     canvas.stroke();
 }
 $('#open').click(() => {
-
+    if (!navigator.mediaDevices.getUserMedia) {
+        alert('no')
+        return;
+    }
     // Use facingMode: environment to attemt to get the front camera on phones
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function (stream) {
         video.srcObject = stream;
@@ -26,6 +29,13 @@ $('#open').click(() => {
         requestAnimationFrame(tick);
     });
 })
+
+
+const fileUploader = document.querySelector('#fileUpload');
+
+fileUploader.addEventListener('change', (e) => {
+  console.log(e.target.files); // get file object
+});
 
 function tick() {
     loadingMessage.innerText = "⌛ Loading video..."
