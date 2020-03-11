@@ -76,7 +76,7 @@
           audio: false
         });
       }
-
+      alert('Your browser does not support getUserMedia')
       return Promise.reject('Your browser does not support getUserMedia');
     }
 
@@ -93,6 +93,7 @@
           return Promise.resolve(exCameras);
         }).then(function (ids) {
           if (ids.length === 0) {
+            alert('Could not find a webcam')
             return Promise.reject('Could not find a webcam');
           }
 
@@ -122,5 +123,16 @@
     }
   </script>
 </body>
+<input type="file" accept="video/*" capture="camera" id="recorder">
+<video id="player" controls></video>
+<script>
+  var recorder = document.getElementById('recorder');
+  var player = document.getElementById('player');
 
+  recorder.addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    // Do something with the video file.
+    player.src = URL.createObjectURL(file);
+  });
+</script>
 </html>
