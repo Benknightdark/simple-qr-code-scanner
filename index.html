@@ -1,20 +1,144 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-	<title>Parcel Sandbox</title>
-	<meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <title>Scandit Web SDK</title>
+
+    <!-- Add the library, as explained on http://docs.scandit.com/stable/web/index.html -->
+    <script src="https://cdn.jsdelivr.net/npm/scandit-sdk@4.x"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: 3vh;
+            font-family: 'Open Sans', sans-serif;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #scandit-barcode-picker {
+            width: 100%;
+            height: 100%;
+            max-height: 70vh;
+        }
+
+        #scandit-barcode-result {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+        }
+
+        button,
+        button:active,
+        button[disabled]:hover {
+            --webkit-appearance: none;
+            border: none;
+            border-radius: none;
+            outline: none;
+            font-size: 0.7em;
+            padding: 0.4em 0.6em;
+            margin: 20px;
+            text-transform: uppercase;
+            font-family: 'Open Sans', sans-serif;
+            background: #2ec0cc;
+            color: white;
+        }
+
+        button:hover {
+            background: #30d0d8;
+        }
+
+        button[disabled] {
+            opacity: 0.4;
+        }
+
+        #continue-scanning-button {
+            margin-bottom: 10vh;
+        }
+    </style>
 </head>
 
 <body>
-    <button type='button' id='open'>🎥scan</button>
-<div id="loadingMessage"></div>
-<canvas id="canvas" hidden></canvas>
-<div id="output" hidden>
-    <div id="outputMessage">No QR code detected.</div>
-    <div hidden><b>Data:</b> <span id="outputData"></span></div>
-</div>
-	<input type="file" id="file" accept="image/png" />
-	<script src="src/app.ts"></script>
+    <!-- Containers for the picker and the results -->
+    <div id="scandit-barcode-picker"></div>
+    <div id="scandit-barcode-result">No codes scanned yet</div>
+    <!-- Button to continue scanning after a barcode was scanned -->
+    <button id="continue-scanning-button" onclick="continueScanning()">Continue Scanning</button>
+
+    <script>
+        // Helper function called when the "Continue Scanning" button is clicked
+        function continueScanning() {
+            if (picker) {
+                continueButton.disabled = true;
+
+                // Resume scanning
+                picker.resumeScanning();
+            }
+        }
+
+        // Configure the library and activate it with a license key
+        const licenseKey = "AaN+gTHIL16VN0WAqCMVWTsju2QaBoqi3FKh84tdihf/RsZj2CajnOhBqNh5EPt0Anlaf+5KCEj9RmOnzky183JVgITiQZNc7VDBUxx0YKNQfnNEJ1rqCu95prY6dw4tZku33YljWDWRUVCSyByRGhtGazlMB7w7xUV6u28CWngBlVxt+4W+Zp52plAhAZRN/IB86+yRb6t5Kb2VaS7aWcPipCKUQF/cPeNcjmU12LkGcyVmQvA8RPq6J9nZwTL4i1o19XsA8VrGepCUqJvD9FHhe9LB8yBcl/R+MV+CV1cwiqC2rwr8/Ds9TAiwvkw10Y9Bwg7wC10ne9le7HgOubJTiYEDiPWKtxxAvBPHuf4VIV/b3UtAMdIwMljHPL97KcumEL8Ky/dbGNaXjOVlhLaL3CHVrK5REBKGZ+CS00ZRFDIu2buouoBC0R/rqtqWfMogUdrjXQLfCuuVW95pX739/T6yK7rIIpTcqdIkg49L/E01aCthvqST18vXjbqdd7/UuPsu/jIBVoCsnKz1fH9AZCCM99cdUk/aakNp3TrIqYT3OVBqOArxKdzOhc2nhh9PWO1MOvr9uQt9b144x2xbWJwzFJw7XJlGiQn7RSwDN8ttt6iAKMwfXjwpiFnFdE/pTG1/R3KaFXnMGpG5h7RLcah8oe1ksTnWP0Say8m5TXPBKny5I7FtFBMhccgLRuVQuRW8XRSyG2nAaQw64HrT8K7WMkDhjtC3aYxH2Ne1JioASLZ4t8CBXQax+TvmwLKuwgN5k5tktzrWrG41yxa34Teq9ddjgLA3CkXX3ie3HxAjDwvsbrOHOoFvYSHURsrG1yo/g15b";
+
+        // Configure the engine location, as explained on http://docs.scandit.com/stable/web/index.html
+        // const engineLocation = "build"; // the folder containing the engine
+        // or, if using a CDN:
+        const engineLocation = "https://cdn.jsdelivr.net/npm/scandit-sdk@4.x/build"
+
+        ScanditSDK.configure(licenseKey, { engineLocation: engineLocation });
+
+        const scannerContainer = document.getElementById("scandit-barcode-picker");
+        const resultContainer = document.getElementById("scandit-barcode-result");
+        const continueButton = document.getElementById("continue-scanning-button");
+        continueButton.disabled = true;
+        continueButton.hidden = true;
+        let picker;
+
+        // Create & start the picker
+        ScanditSDK.BarcodePicker.create(scannerContainer, {
+                playSoundOnScan: true,
+                vibrateOnScan: true
+            })
+            .then(barcodePicker => {
+                picker = barcodePicker;
+                // Create the settings object to be applied to the scanner
+                const scanSettings = new ScanditSDK.ScanSettings({
+                    enabledSymbologies: ["ean8", "ean13", "upca", "upce", "code128", "code39", "code93",
+                        "itf"
+                    ],
+                    codeDuplicateFilter: 1000
+                });
+                picker.applyScanSettings(scanSettings);
+
+                // If a barcode is scanned, show it to the user and pause scanning
+                // (scanning is resumed when the user clicks "Continue Scanning")
+                picker.on("scan", scanResult => {
+                    continueButton.hidden = false;
+                    continueButton.disabled = false;
+                    picker.pauseScanning();
+                    resultContainer.innerHTML = scanResult.barcodes.reduce((string, barcode) =>
+                        string +
+                        `${ScanditSDK.Barcode.Symbology.toHumanizedName(barcode.symbology)}: ${barcode.data}<br>`,
+                        '');
+                });
+                picker.on("scanError", error => {
+                    console.error(error.message);
+                });
+                picker.resumeScanning();
+            })
+            .catch(error => {
+                alert(error);
+            });
+    </script>
 </body>
 
 </html>

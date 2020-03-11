@@ -12,7 +12,8 @@
     "jimp": "^0.9.5",
     "jquery": "^3.4.1",
     "jsqr": "^1.2.0",
-    "png.js": "^0.2.1"
+    "png.js": "^0.2.1",
+    "scandit-sdk": "^4.6.3"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.33",
