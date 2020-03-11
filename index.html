@@ -29,39 +29,72 @@
             margin-bottom: 16px;
         }
     </style>
-    <div id="scan-web-cam">
-        <h1>Scan from WebCam:</h1>
-        <div>
-            <b>Device has camera: </b>
-            <span id="cam-has-camera"></span>
-            <br>
-            <video muted playsinline id="qr-video"></video>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    Launch demo modal
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div>
-            <select id="inversion-mode-select">
-                <option value="original">Scan original (dark QR code on bright background)</option>
-                <option value="invert">Scan with inverted colors (bright QR code on dark background)</option>
-                <option value="both">Scan both</option>
-            </select>
-            <br>
+        <div class="modal-body">
+            <div id="scan-web-cam">
+                <h1>Scan from WebCam:</h1>
+                <div>
+                    <b>Device has camera: </b>
+                    <span id="cam-has-camera"></span>
+                    <br>
+                    <video muted playsinline id="qr-video" class='embed-responsive'></video>
+                </div>
+                <div>
+                    <select id="inversion-mode-select">
+                        <option value="original">Scan original (dark QR code on bright background)</option>
+                        <option value="invert">Scan with inverted colors (bright QR code on dark background)</option>
+                        <option value="both">Scan both</option>
+                    </select>
+                    <br>
+                </div>
+                <b>Detected QR code: </b>
+                <span id="cam-qr-result">None</span>
+                <br>
+                <b>Last detected at: </b>
+                <span id="cam-qr-result-timestamp"></span>
+                <hr>
+            </div>
+            <div id="scan-from-upload">
+                <h1>Scan from File:</h1>
+                <input type="file" id="file-selector" accept="image/png, image/jpeg">
+                <b>Detected QR code: </b>
+                <span id="file-qr-result">None</span>
+            </div>
         </div>
-        <b>Detected QR code: </b>
-        <span id="cam-qr-result">None</span>
-        <br>
-        <b>Last detected at: </b>
-        <span id="cam-qr-result-timestamp"></span>
-        <hr>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
     </div>
-    <h1>Scan from File:</h1>
-    <input type="file" id="file-selector" accept="image/png, image/jpeg">
-    <b>Detected QR code: </b>
-    <span id="file-qr-result">None</span>
+  </div>
+
+
+
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+  crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha256-WqU1JavFxSAMcLP2WIOI+GB2zWmShMI82mTpLDcqFUg=" crossorigin="anonymous"></script>
-    <script src='./src/app.js' type='module'>
+    <script src='./src/app.js' type='module'>    </script>
 
 
-    </script>
+
 </body>
 
 </html>
