@@ -78,18 +78,44 @@
                         <span id="file-qr-result">None</span>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
 
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#bar-code-scanner-modal">
+        <i class="fas fa-barcode"></i>
+        bar code SCAN !!!!!
+     </button>
 
-    <div id='bar-code'></div>
 
-    <input type="file" id="file"  />
+        <div class="modal fade" id="bar-code-scanner-modal" tabindex="-1" role="dialog"
+        aria-labelledby="bar-code-scanner-modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id='bar-code'></div>
+                    <h1>Scan from File:</h1>
+                    <input type="file" id="file"  />
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+   
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
