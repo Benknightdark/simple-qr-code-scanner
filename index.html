@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QR Scanner Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
+</head>
+
+<body>
+    <style>
+        canvas {
+            display: none;
+        }
+
+        hr {
+            margin-top: 32px;
+        }
+
+        input[type="file"] {
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        div {
+            margin-bottom: 16px;
+        }
+    </style>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#qr-code-scanner-modal">
+        <i class="fa fa-qrcode" aria-hidden="true"></i>
+        qr code SCAN !!!!! </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="qr-code-scanner-modal" tabindex="-1" role="dialog"
+        aria-labelledby="qr-code-scanner-modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">QR Code</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="scan-web-cam">
+                        <h1>Scan from WebCam:</h1>
+                        <div>
+                            <b>Device has camera: </b>
+                            <span id="cam-has-camera"></span>
+                            <br>
+                            <video muted playsinline id="qr-video" class='embed-responsive'></video>
+                        </div>
+                        <div>
+                            <select id="inversion-mode-select">
+                                <option value="original">Scan original (dark QR code on bright background)</option>
+                                <option value="invert">Scan with inverted colors (bright QR code on dark background)
+                                </option>
+                                <option value="both">Scan both</option>
+                            </select>
+                            <br>
+                        </div>
+                        <b>Detected QR code: </b>
+                        <span id="cam-qr-result">None</span>
+                        <br>
+                        <b>Last detected at: </b>
+                        <span id="cam-qr-result-timestamp"></span>
+                        <hr>
+                    </div>
+                    <div id="scan-from-upload">
+                        <h1>Scan from File:</h1>
+                        <input type="file" id="file-selector" accept="image/png, image/jpeg">
+                        <b>Detected QR code: </b>
+                        <span id="file-qr-result">None</span>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#bar-code-scanner-modal">
+        <i class="fa fa-barcode"></i>
+        bar code SCAN !!!!!
+     </button>
+
+
+        <div class="modal fade" id="bar-code-scanner-modal" tabindex="-1" role="dialog"
+        aria-labelledby="bar-code-scanner-modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Bar Code</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id='bar-code'></div>
+                    <h1>Scan from File:</h1>
+                    <input type="file" id="file"  />
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+   
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"
+        integrity="sha256-JDVyLQRqvRSTL/6WaPud93JXpfEdW11zwjqhoNgkGXc=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha256-WqU1JavFxSAMcLP2WIOI+GB2zWmShMI82mTpLDcqFUg=" crossorigin="anonymous"></script>
+    <script src='./src/app.js' type='module'>    </script>
+
+
+
+</body>
+
+</html>
