@@ -66,84 +66,100 @@ import QrScanner from "./qr-scanner.min.js";
     initQRCode();
 
     const initBarCode = () => {
-        if(checkUserMedia()){
-            Quagga.init({
-                inputStream: {
-                    name: "Live",
-                    type: "LiveStream",
-                    target: document.querySelector('#bar-code')    // Or '#yourElement' (optional)
-                },
-                decoder: {
-                    readers: ["code_128_reader"]
-                }
-            }, function (err) {
-                if (err) {
-                    console.log(err);
-                    return
-                }
-                console.log("Initialization finished. Ready to start");
-                Quagga.start();
-            });
-            Quagga.onDetected(function (result) {
-                var code = result.codeResult.code;
-
-              
-                    const stream = $('#bar-code').children('video')[0].srcObject;
-                    const tracks = stream.getTracks();
+        const stopCamera=()=>{
+            const stream = $('#bar-code').children('video')[0].srcObject;
+                        const tracks = stream.getTracks();
+                      
+                        tracks.forEach(function(track) {
+                          track.stop();
+                        });
+                      
+                        $('#bar-code').children('video')[0].srcObject = null;
+        }
+        const initBarCodeScanner=()=>{
+            if(checkUserMedia()){
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: document.querySelector('#bar-code')    // Or '#yourElement' (optional)
+                    },
+                    decoder: {
+                        readers: ["code_128_reader"]
+                    }
+                }, function (err) {
+                    if (err) {
+                        console.log(err);
+                        return
+                    }
+                    console.log("Initialization finished. Ready to start");
+                    Quagga.start();
+                });
+                Quagga.onDetected(function (result) {
+                    var code = result.codeResult.code;
+    
                   
-                    tracks.forEach(function(track) {
-                      track.stop();
-                    });
-                  
-                    $('#bar-code').children('video')[0].srcObject = null;
-                    alert(code)
-
+                        
+                        alert(code)
+                        stopCamera();
+    
+                });
+        
+            }
+           
+    
+            $("#file").change(function () {
+                var input = this//.files[0]
+                if (input.files && input.files.length) {
+                     decode(URL.createObjectURL(input.files[0]));
+                }
             });
     
-        }
-       
-
-        $("#file").change(function () {
-            var input = this//.files[0]
-            if (input.files && input.files.length) {
-                 decode(URL.createObjectURL(input.files[0]));
-            }
-        });
-
-        function decode(src){
-            var config = {
-                  inputStream: {
-                  size: 800,
-                  singleChannel: false
-                  },
-                  locator: {
-                      patchSize: "medium",
-                      halfSample: true
-                     },
-                   decoder: {
-                      readers: [{
-                           format: "code_128_reader",
-                           config: {}
-                          }]
+            function decode(src){
+                var config = {
+                      inputStream: {
+                      size: 800,
+                      singleChannel: false
                       },
-                   locate: true,
-                    src: src
-             }
-      
-             Quagga.decodeSingle(config, function(result) {
-                      if(!result){
-                         alert("圖片中沒有條形碼！");
-                         return false;
-                      }
-                      //識別結果
-                      if(result.codeResult){
-                          console.log("圖片中的條形碼為："+result.codeResult.code);
-                          alert("圖片中的條形碼為：" + result.codeResult.code);
-                      }else{
-                          alert("未識別到圖片中的條形碼！");
-                      }
-             });
-      }
+                      locator: {
+                          patchSize: "medium",
+                          halfSample: true
+                         },
+                       decoder: {
+                          readers: [{
+                               format: "code_128_reader",
+                               config: {}
+                              }]
+                          },
+                       locate: true,
+                        src: src
+                 }
+          
+                 Quagga.decodeSingle(config, function(result) {
+                          if(!result){
+                             alert("圖片中沒有條形碼！");
+                             return false;
+                          }
+                          //識別結果
+                          if(result.codeResult){
+                              console.log("圖片中的條形碼為："+result.codeResult.code);
+                              alert("圖片中的條形碼為：" + result.codeResult.code);
+                          }else{
+                              alert("未識別到圖片中的條形碼！");
+                          }
+                 });
+          }
+        }
+        $('#bar-code-scanner-modal').on('hidden.bs.modal', function (e) {
+            console.log('close')
+            stopCamera();
+        
+
+        })
+        $('#bar-code-scanner-modal').on('show.bs.modal', function (e) {
+            console.log('show')
+            initBarCodeScanner();
+        })
     }
     initBarCode();
 
