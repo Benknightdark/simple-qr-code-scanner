@@ -67,6 +67,7 @@ import QrScanner from "./qr-scanner.min.js";
 
     const initBarCode = () => {
         const stopCamera=()=>{
+            if(!checkUserMedia()) return;
             const stream = $('#bar-code').children('video')[0].srcObject;
                         const tracks = stream.getTracks();
                       
@@ -94,6 +95,7 @@ import QrScanner from "./qr-scanner.min.js";
                     }
                     console.log("Initialization finished. Ready to start");
                     Quagga.start();
+                    $('#bar-code').children('video').addClass('embed-responsive')
                 });
                 Quagga.onDetected(function (result) {
                     var code = result.codeResult.code;
