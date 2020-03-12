@@ -3,7 +3,7 @@ import QrScanner from "./qr-scanner.min.js";
     const checkUserMedia = () => {
         return navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
     }
-    const initQRCode=()=>{
+    const initQRCode = () => {
         QrScanner.WORKER_PATH = './qr-scanner-worker.min.js';
         let scanner;
         const video = document.getElementById('qr-video');
@@ -12,7 +12,7 @@ import QrScanner from "./qr-scanner.min.js";
         const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
         const fileSelector = document.getElementById('file-selector');
         const fileQrResult = document.getElementById('file-qr-result');
-       
+
         function setResult(label, result) {
             alert(result)
             label.textContent = result;
@@ -21,27 +21,27 @@ import QrScanner from "./qr-scanner.min.js";
             clearTimeout(label.highlightTimeout);
             label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
         }
-    
+
         const initQRCodeScanner = () => {
             // ####### Web Cam Scanning #######
-    
+
             if (checkUserMedia()) {
                 QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-    
+
                 scanner = new QrScanner(video, result => setResult(camQrResult, result));
                 scanner.start();
-    
+
                 document.getElementById('inversion-mode-select').addEventListener('change', event => {
                     scanner.setInversionMode(event.target.value);
                 });
-    
+
             } else {
                 $('#scan-web-cam').hide();
             }
-    
-    
+
+
             // ####### File Scanning #######
-    
+
             fileSelector.addEventListener('change', event => {
                 const file = fileSelector.files[0];
                 if (!file) {
@@ -56,7 +56,7 @@ import QrScanner from "./qr-scanner.min.js";
             console.log('close')
             scanner.destroy();
             scanner = null;
-    
+
         })
         $('#qr-code-scanner-modal').on('show.bs.modal', function (e) {
             console.log('show')
@@ -65,28 +65,31 @@ import QrScanner from "./qr-scanner.min.js";
     }
     initQRCode();
 
-    const initBarCode=()=>{
+    const initBarCode = () => {
         Quagga.init({
-            inputStream : {
-              name : "Live",
-              type : "LiveStream",
-              target: document.querySelector('#bar-code')    // Or '#yourElement' (optional)
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#bar-code')    // Or '#yourElement' (optional)
             },
-            decoder : {
-              readers : ["code_128_reader"]
+            decoder: {
+                readers: ["code_128_reader"]
             }
-          }, function(err) {
-              if (err) {
-                  console.log(err);
-                  return
-              }
-              console.log("Initialization finished. Ready to start");
-              Quagga.start();
-          });
-          Quagga.onDetected(function(result) {
+        }, function (err) {
+            if (err) {
+                console.log(err);
+                return
+            }
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
+        Quagga.onDetected(function (result) {
             var code = result.codeResult.code;
             alert(code)
         });
+
+
+       
     }
     initBarCode();
 
