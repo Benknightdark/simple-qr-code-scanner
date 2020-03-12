@@ -89,7 +89,48 @@ import QrScanner from "./qr-scanner.min.js";
         });
 
 
-       
+        $("#file").change(function () {
+            var input = this//.files[0]
+            console.log(input)
+            if (input.files && input.files.length) {
+                 decode(URL.createObjectURL(input.files[0]));
+            }
+        });
+
+        function decode(src){
+            var config = {
+                  inputStream: {
+                  size: 800,
+                  singleChannel: false
+                  },
+                  locator: {
+                      patchSize: "medium",
+                      halfSample: true
+                     },
+                   decoder: {
+                      readers: [{
+                           format: "code_128_reader",
+                           config: {}
+                          }]
+                      },
+                   locate: true,
+                    src: src
+             }
+      
+             Quagga.decodeSingle(config, function(result) {
+                      if(!result){
+                         alert("圖片中沒有條形碼！");
+                         return false;
+                      }
+                      //識別結果
+                      if(result.codeResult){
+                          console.log("圖片中的條形碼為："+result.codeResult.code);
+                          alert("圖片中的條形碼為：" + result.codeResult.code);
+                      }else{
+                          alert("未識別到圖片中的條形碼！");
+                      }
+             });
+      }
     }
     initBarCode();
 
