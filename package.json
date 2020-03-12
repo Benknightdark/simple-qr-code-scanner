@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "parcel ./index.html",
-    "build": "parcel build ./index.html & firebase deploy"
+    "start": "rm -r dist & mkdir dist & cp ./src/qr-scanner-worker.min.js ./dist/ & cp ./src/qr-scanner-worker.min.js.map ./dist/ & parcel ./index.html  ",
+    "build": "rm -r dist & mkdir dist & cp ./src/qr-scanner-worker.min.js ./dist/ & cp ./src/qr-scanner-worker.min.js.map ./dist/ & parcel build ./index.html & firebase deploy"
   },
   "author": "",
   "license": "ISC",
