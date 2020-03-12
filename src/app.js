@@ -66,8 +66,10 @@ import QrScanner from "./qr-scanner.min.js";
     initQRCode();
 
     const initBarCode = () => {
+        let q2
+        let q
         const stopCamera=()=>{
-            if(!checkUserMedia()) return;
+            // if(!checkUserMedia()) return;
             const stream = $('#bar-code').children('video')[0].srcObject;
                         const tracks = stream.getTracks();
                       
@@ -75,11 +77,13 @@ import QrScanner from "./qr-scanner.min.js";
                           track.stop();
                         });
                       
-                        $('#bar-code').children('video')[0].srcObject = null;
+                       // $('#bar-code').children('video')[0].srcObject = null;
         }
+        
         const initBarCodeScanner=()=>{
             if(checkUserMedia()){
-                Quagga.init({
+                 q2=Quagga
+                q2.init({
                     inputStream: {
                         name: "Live",
                         type: "LiveStream",
@@ -97,13 +101,18 @@ import QrScanner from "./qr-scanner.min.js";
                     Quagga.start();
                     $('#bar-code').children('video').addClass('embed-responsive')
                 });
-                Quagga.onDetected(function (result) {
-                    var code = result.codeResult.code;
+                q2.onDetected(function (result) {
+                    try {
+                        var code = result.codeResult.code;
     
-                  
+                  $('#cam-bar-result').text(code);
                         
-                        alert(code)
-                        stopCamera();
+                     
+                        //stopCamera();
+                    } catch (error) {
+                        alert(error)
+
+                    }
     
                 });
         
@@ -118,6 +127,7 @@ import QrScanner from "./qr-scanner.min.js";
             });
     
             function decode(src){
+                 q=Quagga;
                 var config = {
                       inputStream: {
                       size: 800,
@@ -137,7 +147,7 @@ import QrScanner from "./qr-scanner.min.js";
                         src: src
                  }
           
-                 Quagga.decodeSingle(config, function(result) {
+                 q.decodeSingle(config, function(result) {
                           if(!result){
                              alert("圖片中沒有條形碼！");
                              return false;
@@ -155,6 +165,8 @@ import QrScanner from "./qr-scanner.min.js";
         $('#bar-code-scanner-modal').on('hidden.bs.modal', function (e) {
             console.log('close')
             stopCamera();
+            q2=null;
+            q=null;
         
 
         })
