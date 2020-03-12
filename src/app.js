@@ -66,32 +66,45 @@ import QrScanner from "./qr-scanner.min.js";
     initQRCode();
 
     const initBarCode = () => {
-        Quagga.init({
-            inputStream: {
-                name: "Live",
-                type: "LiveStream",
-                target: document.querySelector('#bar-code')    // Or '#yourElement' (optional)
-            },
-            decoder: {
-                readers: ["code_128_reader"]
-            }
-        }, function (err) {
-            if (err) {
-                console.log(err);
-                return
-            }
-            console.log("Initialization finished. Ready to start");
-            Quagga.start();
-        });
-        Quagga.onDetected(function (result) {
-            var code = result.codeResult.code;
-            alert(code)
-        });
+        if(checkUserMedia()){
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#bar-code')    // Or '#yourElement' (optional)
+                },
+                decoder: {
+                    readers: ["code_128_reader"]
+                }
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                    return
+                }
+                console.log("Initialization finished. Ready to start");
+                Quagga.start();
+            });
+            Quagga.onDetected(function (result) {
+                var code = result.codeResult.code;
 
+              
+                    const stream = $('#bar-code').children('video')[0].srcObject;
+                    const tracks = stream.getTracks();
+                  
+                    tracks.forEach(function(track) {
+                      track.stop();
+                    });
+                  
+                    $('#bar-code').children('video')[0].srcObject = null;
+                    alert(code)
+
+            });
+    
+        }
+       
 
         $("#file").change(function () {
             var input = this//.files[0]
-            console.log(input)
             if (input.files && input.files.length) {
                  decode(URL.createObjectURL(input.files[0]));
             }
